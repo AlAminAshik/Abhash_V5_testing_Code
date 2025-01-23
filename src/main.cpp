@@ -2,8 +2,7 @@
 #include <Arduino.h>
 
 #define TRIG_F 12  //D6 //2 
-#define MAX_DISTANCE_FRONT ddf
-#define ddf 184  // detection distance front
+#define MAX_DISTANCE_FRONT 184
 
 NewPing sonarF(TRIG_F, TRIG_F, MAX_DISTANCE_FRONT + 30);
 
@@ -11,6 +10,7 @@ int dF;
 
 void setup() {
   Serial.begin(115200);
+  Serial.println("Start");
 }
 
 long dst_median(NewPing s, int max, int cnt) {
