@@ -16,11 +16,13 @@ WiFiClient client;
 
 const int CH_PD_PIN = 0;          // pin 25 GPIO 0
 const int PWR_BUTTON_PIN = 19;    // pin 31
-const int Bottom_BUTTON_PIN = 18; // pin 30
-const int TOP_BUTTON_PIN = 21;    // pin 33
-const int battery_volt_PIN = 36;  // pin 4
-const int buzzer_PIN = 26;        //pin 11
-const int IR_led_PIN = 23;        //pin 37
+#define Bottom_BUTTON_PIN 18 // pin 30
+#define TOP_BUTTON_PIN 21    // pin 33
+#define battery_volt_PIN 36  // pin 4
+#define buzzer_PIN 26        //pin 11
+#define IR_led_PIN 23        //pin 37
+#define MOTOR_PIN 32          // pin 8
+#define headphoneDetection 33 //pin 9
 
 unsigned long previousMillis_PWR_Butt = 0;  // will store last time button has pressed
 
@@ -45,8 +47,10 @@ void setup() {
     digitalWrite(CH_PD_PIN, LOW);       // latches the transistor to keep device on
     Serial.println("Device is ON");
   
-  //bootup sound
+  //bootup sound nd vibration
     pinMode(buzzer_PIN, OUTPUT);          //buzzer pin as output
+    pinMode(MOTOR_PIN, OUTPUT);
+    digitalWrite(MOTOR_PIN, HIGH);
     tone(buzzer_PIN, 1000);
     delay(100);
     noTone(buzzer_PIN);
@@ -59,7 +63,7 @@ void setup() {
     delay(100);
     noTone(buzzer_PIN);
     delay(100);
-
+    digitalWrite(MOTOR_PIN, LOW);
 
   WiFi.begin(ssid, password);           //connect to wifi
   pinMode(pedestrian_led, OUTPUT);      //pedestrian led
@@ -67,6 +71,7 @@ void setup() {
   pinMode(TOP_BUTTON_PIN, INPUT_PULLUP); // Top button with pull-up
   pinMode(battery_volt_PIN, INPUT);    // Battery voltage pin
   IrSender.begin(IR_led_PIN);         // Start with IR_SEND_PIN -which is defined in PinDefinitionsAndMore.h- as send pin
+  pinMode(headphoneDetection, INPUT_PULLUP);
   pinMode(2, OUTPUT);                  // on board led
 }
 
@@ -121,6 +126,7 @@ void loop(){
       if(currentMillis - previousMillis_PWR_Butt > 4000) { //if button pressed for 5 seconds
         while(digitalRead(PWR_BUTTON_PIN) == LOW){    //while button is kept pressed
           Serial.println("Shutting Down");
+          digitalWrite(MOTOR_PIN, HIGH);
           tone(buzzer_PIN, 1000);
           delay(100);
           noTone(buzzer_PIN);
@@ -130,9 +136,10 @@ void loop(){
           noTone(buzzer_PIN);
           delay(100);
           tone(buzzer_PIN, 1000);
-          delay(1000);
+          delay(500);
           noTone(buzzer_PIN);
           delay(100);
+          digitalWrite(MOTOR_PIN, LOW);
         }
         digitalWrite(CH_PD_PIN, HIGH);            // turns the mosfet off and thus device off
       }
@@ -169,4 +176,12 @@ void loop(){
 
   getSensorData();
   delay(1000);
+
+  //beep continously if headphone not connected
+  if(digitalRead(headphoneDetection) == LOW){
+  tone(buzzer_PIN, 1000);
+  delay(100);
+  noTone(buzzer_PIN);
+  delay(100);
+  }
 }
