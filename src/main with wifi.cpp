@@ -1,6 +1,7 @@
 #include <NewPing.h>
 #include <Arduino.h>
 #include <WiFi.h>
+#include <IRremote.hpp> // include the library
 
 const char *ssid     = "Alamin";    //enter name of wifi
 const char *password = "12345678";      //enter password for wifi
@@ -17,8 +18,9 @@ const int CH_PD_PIN = 0;          // pin 25 GPIO 0
 const int PWR_BUTTON_PIN = 19;    // pin 31
 const int Bottom_BUTTON_PIN = 18; // pin 30
 const int TOP_BUTTON_PIN = 21;    // pin 33
-const int battery_volt_pin = 36;  // pin 4
-const int buzzer_pin = 26;        //pin 11
+const int battery_volt_PIN = 36;  // pin 4
+const int buzzer_PIN = 26;        //pin 11
+const int IR_led_PIN = 23;        //pin 37
 
 unsigned long previousMillis_PWR_Butt = 0;  // will store last time button has pressed
 
@@ -44,18 +46,18 @@ void setup() {
     Serial.println("Device is ON");
   
   //bootup sound
-    pinMode(buzzer_pin, OUTPUT);          //buzzer pin as output
-    tone(buzzer_pin, 1000);
+    pinMode(buzzer_PIN, OUTPUT);          //buzzer pin as output
+    tone(buzzer_PIN, 1000);
     delay(100);
-    noTone(buzzer_pin);
+    noTone(buzzer_PIN);
     delay(100);
-    tone(buzzer_pin, 1000);
+    tone(buzzer_PIN, 1000);
     delay(100);
-    noTone(buzzer_pin);
+    noTone(buzzer_PIN);
     delay(100);
-    tone(buzzer_pin, 1000);
+    tone(buzzer_PIN, 1000);
     delay(100);
-    noTone(buzzer_pin);
+    noTone(buzzer_PIN);
     delay(100);
 
 
@@ -63,7 +65,8 @@ void setup() {
   pinMode(pedestrian_led, OUTPUT);      //pedestrian led
   pinMode(Bottom_BUTTON_PIN, INPUT_PULLUP); // Middle button with pull-up
   pinMode(TOP_BUTTON_PIN, INPUT_PULLUP); // Top button with pull-up
-  pinMode(battery_volt_pin, INPUT);    // Battery voltage pin
+  pinMode(battery_volt_PIN, INPUT);    // Battery voltage pin
+  IrSender.begin(IR_led_PIN);         // Start with IR_SEND_PIN -which is defined in PinDefinitionsAndMore.h- as send pin
   pinMode(2, OUTPUT);                  // on board led
 }
 
@@ -118,17 +121,17 @@ void loop(){
       if(currentMillis - previousMillis_PWR_Butt > 4000) { //if button pressed for 5 seconds
         while(digitalRead(PWR_BUTTON_PIN) == LOW){    //while button is kept pressed
           Serial.println("Shutting Down");
-          tone(buzzer_pin, 1000);
+          tone(buzzer_PIN, 1000);
           delay(100);
-          noTone(buzzer_pin);
+          noTone(buzzer_PIN);
           delay(100);
-          tone(buzzer_pin, 1000);
+          tone(buzzer_PIN, 1000);
           delay(100);
-          noTone(buzzer_pin);
+          noTone(buzzer_PIN);
           delay(100);
-          tone(buzzer_pin, 1000);
+          tone(buzzer_PIN, 1000);
           delay(1000);
-          noTone(buzzer_pin);
+          noTone(buzzer_PIN);
           delay(100);
         }
         digitalWrite(CH_PD_PIN, HIGH);            // turns the mosfet off and thus device off
@@ -141,18 +144,27 @@ void loop(){
   //check if middle button is pressed
   if(digitalRead(Bottom_BUTTON_PIN) == LOW) {  //if middle button is pressed
     Serial.println("Bottom Button Pressed");
-    digitalWrite(pedestrian_led, HIGH);  //dim pedestrian led
+    //dim pedestrian led
+    digitalWrite(pedestrian_led, HIGH);
+    //turning AC ON
+    uint64_t tRawData[]={0x56A900FF00FF00FF, 0x55AA2AD5};
+    IrSender.sendPulseDistanceWidthFromArray(38, 6050, 7400, 550, 1700, 550, 550, &tRawData[0], 97, PROTOCOL_IS_LSB_FIRST, 0, 0);
   }
 
   //check if top button is pressed
   if(digitalRead(TOP_BUTTON_PIN) == LOW) {  //if top button is pressed
     Serial.println("Top Button Pressed");
-    digitalWrite(pedestrian_led, LOW);  //glow pedestrian led
+    //glow pedestrian led
+    digitalWrite(pedestrian_led, LOW);  
+    //turning AC OFF
+    uint64_t tRawData[]={0x54AB00FF00FF00FF, 0x55AA2AD5};
+    IrSender.sendPulseDistanceWidthFromArray(38, 6050, 7350, 600, 1700, 600, 550, &tRawData[0], 97, PROTOCOL_IS_LSB_FIRST, 0, 0);
+
   }
 
   //check battery voltage
-  int battery_volt = analogRead(battery_volt_pin);  //read battery voltage
-  float battery_volt_float = battery_volt * (3.45 / 4095) * 2;  //convert battery voltage to float
+  int battery_volt = analogRead(battery_volt_PIN);  //read battery voltage
+  float battery_volt_float = battery_volt * (3.57 / 4095) * 2;  //convert battery voltage to float
   Serial.println("Battery Voltage: " + String(battery_volt_float) + "V");
 
   getSensorData();
