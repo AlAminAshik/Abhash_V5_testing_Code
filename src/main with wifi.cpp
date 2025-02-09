@@ -18,6 +18,7 @@ const int PWR_BUTTON_PIN = 19;    // pin 31
 const int Bottom_BUTTON_PIN = 18; // pin 30
 const int TOP_BUTTON_PIN = 21;    // pin 33
 const int battery_volt_pin = 36;  // pin 4
+const int buzzer_pin = 26;        //pin 11
 
 unsigned long previousMillis_PWR_Butt = 0;  // will store last time button has pressed
 
@@ -35,13 +36,29 @@ void setup() {
   Serial.println("Start");
 
   //Power on schedule
-  pinMode(PWR_BUTTON_PIN, INPUT_PULLUP);  // Button with pull-up
-  pinMode(CH_PD_PIN, OUTPUT);         // sets GPIO0 as an output which will pull the mosfet ON
-  digitalWrite(CH_PD_PIN, HIGH);      // keep the mosfet off
-  delay(4000);                        // wait for a defined delay time the device to boot up
-  digitalWrite(CH_PD_PIN, LOW);       // latches the transistor to keep device on
-  Serial.println("Device is ON");
-    
+    pinMode(PWR_BUTTON_PIN, INPUT_PULLUP);  // Button with pull-up
+    pinMode(CH_PD_PIN, OUTPUT);         // sets GPIO0 as an output which will pull the mosfet ON
+    digitalWrite(CH_PD_PIN, HIGH);      // keep the mosfet off
+    delay(4000);                        // wait for a defined delay time the device to boot up
+    digitalWrite(CH_PD_PIN, LOW);       // latches the transistor to keep device on
+    Serial.println("Device is ON");
+  
+  //bootup sound
+    pinMode(buzzer_pin, OUTPUT);          //buzzer pin as output
+    tone(buzzer_pin, 1000);
+    delay(100);
+    noTone(buzzer_pin);
+    delay(100);
+    tone(buzzer_pin, 1000);
+    delay(100);
+    noTone(buzzer_pin);
+    delay(100);
+    tone(buzzer_pin, 1000);
+    delay(100);
+    noTone(buzzer_pin);
+    delay(100);
+
+
   WiFi.begin(ssid, password);           //connect to wifi
   pinMode(pedestrian_led, OUTPUT);      //pedestrian led
   pinMode(Bottom_BUTTON_PIN, INPUT_PULLUP); // Middle button with pull-up
@@ -63,7 +80,7 @@ long dst_median(NewPing s, int max, int cnt) {
   }
   //dstt = dstt / cnt;
   dstt = round(pow(dstt, 1.0 / cnt));
-  Serial.println(millis() - tmr);
+  //Serial.println(millis() - tmr);
   return dstt;
 }
 
@@ -101,6 +118,18 @@ void loop(){
       if(currentMillis - previousMillis_PWR_Butt > 4000) { //if button pressed for 5 seconds
         while(digitalRead(PWR_BUTTON_PIN) == LOW){    //while button is kept pressed
           Serial.println("Shutting Down");
+          tone(buzzer_pin, 1000);
+          delay(100);
+          noTone(buzzer_pin);
+          delay(100);
+          tone(buzzer_pin, 1000);
+          delay(100);
+          noTone(buzzer_pin);
+          delay(100);
+          tone(buzzer_pin, 1000);
+          delay(1000);
+          noTone(buzzer_pin);
+          delay(100);
         }
         digitalWrite(CH_PD_PIN, HIGH);            // turns the mosfet off and thus device off
       }
