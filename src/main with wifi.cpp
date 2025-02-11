@@ -12,17 +12,17 @@ WiFiClient client;
 #define TRIG_L 16   //pin 27
 #define TRIG_F 4    //pin 26 
 #define TRIG_R 17   //pin 28
-#define pedestrian_led 13  //pedestrian led transistor connected pin 16
+#define pedestrian_led 19  //pedestrian led transistor connected pin 31
 
 const int CH_PD_PIN = 0;          // pin 25 GPIO 0
-const int PWR_BUTTON_PIN = 19;    // pin 31
+const int PWR_BUTTON_PIN = 27;    // pin 12
 #define Bottom_BUTTON_PIN 18 // pin 30
 #define TOP_BUTTON_PIN 21    // pin 33
 #define battery_volt_PIN 36  // pin 4
 #define buzzer_PIN 26        //pin 11
 #define IR_led_PIN 23        //pin 37
 #define MOTOR_PIN 32          // pin 8
-#define headphoneDetection 33 //pin 9
+#define headphoneDetection 22 //pin 36
 
 unsigned long previousMillis_PWR_Butt = 0;  // will store last time button has pressed
 
