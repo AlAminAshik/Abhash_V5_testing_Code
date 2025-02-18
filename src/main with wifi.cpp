@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <IRremote.hpp> // include the library
+#include "esp32-hal-ledc.h"
 
 const char *ssid     = "Alamin";    //enter name of wifi
 const char *password = "12345678";      //enter password for wifi
@@ -20,6 +21,7 @@ const int PWR_BUTTON_PIN = 27;    // pin 12
 #define TOP_BUTTON_PIN 21    // pin 33
 #define battery_volt_PIN 36  // pin 4
 #define buzzer_PIN 26        //pin 11
+#define BUZZER_CHANNEL 0      //internal channel connected to buzzer pin
 #define IR_led_PIN 23        //pin 37
 #define MOTOR_PIN 32          // pin 8
 #define headphoneDetection 22
@@ -38,7 +40,8 @@ int dL, dF, dR;
 void setup() {
   Serial.begin(115200);
   Serial.println("Start");
-
+  ledcAttachChannel(buzzer_PIN, 1000, 8, BUZZER_CHANNEL);
+  
   //Power on schedule
     pinMode(PWR_BUTTON_PIN, INPUT_PULLUP);  // Button with pull-up
     pinMode(CH_PD_PIN, OUTPUT);         // sets GPIO0 as an output which will pull the mosfet ON
@@ -47,21 +50,21 @@ void setup() {
     digitalWrite(CH_PD_PIN, LOW);       // latches the transistor to keep device on
     Serial.println("Device is ON");
   
-  //bootup sound nd vibration
-    pinMode(buzzer_PIN, OUTPUT);          //buzzer pin as output
+  //bootup sound nd vibrationu
+    //pinMode(buzzer_PIN, OUTPUT);          //buzzer pin as output
     pinMode(MOTOR_PIN, OUTPUT);
     digitalWrite(MOTOR_PIN, HIGH);
-    tone(buzzer_PIN, 1000);
+    ledcWriteTone(buzzer_PIN, 1000);
     delay(100);
-    noTone(buzzer_PIN);
+    ledcWriteTone(buzzer_PIN, 0);
     delay(100);
-    tone(buzzer_PIN, 1000);
+    ledcWriteTone(buzzer_PIN, 1000);
     delay(100);
-    noTone(buzzer_PIN);
+    ledcWriteTone(buzzer_PIN, 0);
     delay(100);
-    tone(buzzer_PIN, 1000);
+    ledcWriteTone(buzzer_PIN, 1000);
     delay(100);
-    noTone(buzzer_PIN);
+    ledcWriteTone(buzzer_PIN, 0);
     delay(100);
     digitalWrite(MOTOR_PIN, LOW);
 
@@ -127,17 +130,17 @@ void loop(){
         while(digitalRead(PWR_BUTTON_PIN) == LOW){    //while button is kept pressed
           Serial.println("Shutting Down");
           digitalWrite(MOTOR_PIN, HIGH);
-          tone(buzzer_PIN, 1000);
+          ledcWriteTone(buzzer_PIN, 1000);
           delay(100);
-          noTone(buzzer_PIN);
+          ledcWriteTone(buzzer_PIN, 0);
           delay(100);
-          tone(buzzer_PIN, 1000);
+          ledcWriteTone(buzzer_PIN, 1000);
           delay(100);
-          noTone(buzzer_PIN);
+          ledcWriteTone(buzzer_PIN, 0);
           delay(100);
-          tone(buzzer_PIN, 1000);
+          ledcWriteTone(buzzer_PIN, 1000);
           delay(500);
-          noTone(buzzer_PIN);
+          ledcWriteTone(buzzer_PIN, 0);
           delay(100);
           digitalWrite(MOTOR_PIN, LOW);
         }
@@ -179,9 +182,9 @@ void loop(){
 
   //beep continously if headphone not connected
   if(digitalRead(headphoneDetection) == LOW){
-  tone(buzzer_PIN, 1000);
+  ledcWriteTone(buzzer_PIN, 1000);
   delay(100);
-  noTone(buzzer_PIN);
+  ledcWriteTone(buzzer_PIN, 0);
   delay(100);
   }
 }
