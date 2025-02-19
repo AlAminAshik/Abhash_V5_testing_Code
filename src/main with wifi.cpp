@@ -2,7 +2,8 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <IRremote.hpp> // include the library
-#include "esp32-hal-ledc.h"
+#include "driver/adc.h" //OR #include "esp32-hal-ledc.h"
+#include "esp_task_wdt.h" //for disabling watchdog timer
 
 const char *ssid     = "Alamin";    //enter name of wifi
 const char *password = "12345678";      //enter password for wifi
@@ -15,7 +16,8 @@ WiFiClient client;
 #define TRIG_R 17   //pin 28
 #define pedestrian_led 19  //pedestrian led transistor connected pin 31
 
-const int CH_PD_PIN = 13;          // pin 16 GPIO 13
+const int CH_PD_PIN = 13;          // pin 16 GPIO 13 V5.05
+//const int CH_PD_PIN = 0;          // pin 16 GPIO 13 V5.04
 const int PWR_BUTTON_PIN = 27;    // pin 12
 #define Bottom_BUTTON_PIN 18 // pin 30
 #define TOP_BUTTON_PIN 21    // pin 33
@@ -38,6 +40,7 @@ NewPing sonarR(TRIG_R, TRIG_R, MAX_DISTANCE_SIDE + 30);
 int dL, dF, dR;
 
 void setup() {
+  esp_task_wdt_deinit(); // Disable watchdog timer
   Serial.begin(115200);
   Serial.println("Start");
   ledcAttachChannel(buzzer_PIN, 1000, 8, BUZZER_CHANNEL);
@@ -159,6 +162,7 @@ void loop(){
     //turning AC ON
     uint64_t tRawData[]={0x56A900FF00FF00FF, 0x55AA2AD5};
     IrSender.sendPulseDistanceWidthFromArray(38, 6050, 7400, 550, 1700, 550, 550, &tRawData[0], 97, PROTOCOL_IS_LSB_FIRST, 0, 0);
+    
   }
 
   //check if top button is pressed
