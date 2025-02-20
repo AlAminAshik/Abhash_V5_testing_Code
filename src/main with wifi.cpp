@@ -6,9 +6,10 @@
 #include "esp_task_wdt.h" //for disabling watchdog timer
 
 #include "SoundData.h"
-#include "batteryLw.h"
+#include "halka_dane_jan.h"
 #include "XT_DAC_Audio.h"
 
+XT_Wav_Class halka_dane_audio(halka_dane_jan);
 XT_Wav_Class Sample_audio(sample);   //initializing the sample audio data
 XT_DAC_Audio_Class DacAudio(25, 0); //connected to pin10 or GPIO25 or DAC1
 
@@ -97,6 +98,15 @@ void play_sample()
   DacAudio.FillBuffer();
   DacAudio.Play(&Sample_audio);
   while (Sample_audio.Playing)
+  {
+    DacAudio.FillBuffer();
+  }
+}
+void play_halka_dane()
+{
+  DacAudio.FillBuffer();
+  DacAudio.Play(&halka_dane_audio);
+  while (halka_dane_audio.Playing)
   {
     DacAudio.FillBuffer();
   }
@@ -198,6 +208,10 @@ void loop(){
     //turning AC OFF
     //uint64_t tRawData[]={0x54AB00FF00FF00FF, 0x55AA2AD5};
     //IrSender.sendPulseDistanceWidthFromArray(38, 6050, 7350, 600, 1700, 600, 550, &tRawData[0], 97, PROTOCOL_IS_LSB_FIRST, 0, 0);
+
+    //playing sound
+    Serial.println("Playing sample");
+    play_halka_dane();
   }
 
   //check battery voltage
