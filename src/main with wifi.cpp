@@ -1,9 +1,17 @@
-#include <NewPing.h>
 #include <Arduino.h>
+#include <NewPing.h>
 #include <WiFi.h>
 #include <IRremote.hpp> // include the library
-#include "driver/adc.h" //OR #include "esp32-hal-ledc.h"
+// #include "driver/adc.h" //OR 
 #include "esp_task_wdt.h" //for disabling watchdog timer
+
+#include "SoundData.h"
+#include "batteryLw.h"
+#include "XT_DAC_Audio.h"
+
+XT_Wav_Class batteryLw_audio(batterylow);
+XT_Wav_Class Sample_audio(sample);   //initializing the sample audio data
+XT_DAC_Audio_Class DacAudio(25, 0); //connected to pin10 or GPIO25 or DAC1
 
 const char *ssid     = "Alamin";    //enter name of wifi
 const char *password = "12345678";      //enter password for wifi
@@ -43,8 +51,12 @@ void setup() {
   esp_task_wdt_deinit(); // Disable watchdog timer
   Serial.begin(115200);
   Serial.println("Start");
-  ledcAttachChannel(buzzer_PIN, 1000, 8, BUZZER_CHANNEL);
-  
+
+  // // Configure LEDC PWM
+  ledcSetup(BUZZER_CHANNEL, 5000, 8); //channel number, PWM frequency, 8 bit resolution
+  // // Attach the LED pin to the LEDC channel
+  ledcAttachPin(buzzer_PIN, BUZZER_CHANNEL); //buzzer pin connected to channel 0
+
   //Power on schedule
     pinMode(PWR_BUTTON_PIN, INPUT_PULLUP);  // Button with pull-up
     pinMode(CH_PD_PIN, OUTPUT);         // sets GPIO0 as an output which will pull the mosfet ON
@@ -57,17 +69,17 @@ void setup() {
     //pinMode(buzzer_PIN, OUTPUT);          //buzzer pin as output
     pinMode(MOTOR_PIN, OUTPUT);
     digitalWrite(MOTOR_PIN, HIGH);
-    ledcWriteTone(buzzer_PIN, 1000);
+    ledcWriteTone(BUZZER_CHANNEL, 1000);
     delay(100);
-    ledcWriteTone(buzzer_PIN, 0);
+    ledcWriteTone(BUZZER_CHANNEL, 0);
     delay(100);
-    ledcWriteTone(buzzer_PIN, 1000);
+    ledcWriteTone(BUZZER_CHANNEL, 1000);
     delay(100);
-    ledcWriteTone(buzzer_PIN, 0);
+    ledcWriteTone(BUZZER_CHANNEL, 0);
     delay(100);
-    ledcWriteTone(buzzer_PIN, 1000);
+    ledcWriteTone(BUZZER_CHANNEL, 1000);
     delay(100);
-    ledcWriteTone(buzzer_PIN, 0);
+    ledcWriteTone(BUZZER_CHANNEL, 0);
     delay(100);
     digitalWrite(MOTOR_PIN, LOW);
 
@@ -79,6 +91,25 @@ void setup() {
   IrSender.begin(IR_led_PIN);         // Start with IR_SEND_PIN -which is defined in PinDefinitionsAndMore.h- as send pin
   pinMode(headphoneDetection, INPUT_PULLUP);
   pinMode(2, OUTPUT);                  // on board led
+}
+
+void play_sample()
+{
+  DacAudio.FillBuffer();
+  DacAudio.Play(&Sample_audio);
+  while (Sample_audio.Playing)
+  {
+    DacAudio.FillBuffer();
+  }
+}
+void play_batteryLow()
+{
+  DacAudio.FillBuffer();
+  DacAudio.Play(&batteryLw_audio);
+  while (batteryLw_audio.Playing)
+  {
+    DacAudio.FillBuffer();
+  }
 }
 
 long dst_median(NewPing s, int max, int cnt) {
@@ -133,17 +164,17 @@ void loop(){
         while(digitalRead(PWR_BUTTON_PIN) == LOW){    //while button is kept pressed
           Serial.println("Shutting Down");
           digitalWrite(MOTOR_PIN, HIGH);
-          ledcWriteTone(buzzer_PIN, 1000);
+          ledcWriteTone(BUZZER_CHANNEL, 1000);
           delay(100);
-          ledcWriteTone(buzzer_PIN, 0);
+          ledcWriteTone(BUZZER_CHANNEL, 0);
           delay(100);
-          ledcWriteTone(buzzer_PIN, 1000);
+          ledcWriteTone(BUZZER_CHANNEL, 1000);
           delay(100);
-          ledcWriteTone(buzzer_PIN, 0);
+          ledcWriteTone(BUZZER_CHANNEL, 0);
           delay(100);
-          ledcWriteTone(buzzer_PIN, 1000);
+          ledcWriteTone(BUZZER_CHANNEL, 1000);
           delay(500);
-          ledcWriteTone(buzzer_PIN, 0);
+          ledcWriteTone(BUZZER_CHANNEL, 0);
           delay(100);
           digitalWrite(MOTOR_PIN, LOW);
         }
@@ -159,10 +190,14 @@ void loop(){
     Serial.println("Bottom Button Pressed");
     //dim pedestrian led
     digitalWrite(pedestrian_led, HIGH);
-    //turning AC ON
-    uint64_t tRawData[]={0x56A900FF00FF00FF, 0x55AA2AD5};
-    IrSender.sendPulseDistanceWidthFromArray(38, 6050, 7400, 550, 1700, 550, 550, &tRawData[0], 97, PROTOCOL_IS_LSB_FIRST, 0, 0);
     
+    //turning AC ON
+    //uint64_t tRawData[]={0x56A900FF00FF00FF, 0x55AA2AD5};
+    //IrSender.sendPulseDistanceWidthFromArray(38, 6050, 7400, 550, 1700, 550, 550, &tRawData[0], 97, PROTOCOL_IS_LSB_FIRST, 0, 0);
+    
+    //playing sound
+    Serial.println("Playing sample");
+    play_sample();
   }
 
   //check if top button is pressed
@@ -171,14 +206,17 @@ void loop(){
     //glow pedestrian led
     digitalWrite(pedestrian_led, LOW);  
     //turning AC OFF
-    uint64_t tRawData[]={0x54AB00FF00FF00FF, 0x55AA2AD5};
-    IrSender.sendPulseDistanceWidthFromArray(38, 6050, 7350, 600, 1700, 600, 550, &tRawData[0], 97, PROTOCOL_IS_LSB_FIRST, 0, 0);
-
+    //uint64_t tRawData[]={0x54AB00FF00FF00FF, 0x55AA2AD5};
+    //IrSender.sendPulseDistanceWidthFromArray(38, 6050, 7350, 600, 1700, 600, 550, &tRawData[0], 97, PROTOCOL_IS_LSB_FIRST, 0, 0);
+  
+    //playing sound
+    Serial.println("playing sound");
+    play_batteryLow();
   }
 
   //check battery voltage
   int battery_volt = analogRead(battery_volt_PIN);  //read battery voltage
-  float battery_volt_float = battery_volt * (3.57 / 4095) * 2;  //convert battery voltage to float
+  float battery_volt_float = battery_volt * (3.69 / 4095) * 2;  //convert battery voltage to float
   Serial.println("Battery Voltage: " + String(battery_volt_float) + "V");
 
   getSensorData();
@@ -186,9 +224,9 @@ void loop(){
 
   //beep continously if headphone not connected
   if(digitalRead(headphoneDetection) == LOW){
-  ledcWriteTone(buzzer_PIN, 1000);
+  ledcWriteTone(BUZZER_CHANNEL, 1000);
   delay(100);
-  ledcWriteTone(buzzer_PIN, 0);
+  ledcWriteTone(BUZZER_CHANNEL, 0);
   delay(100);
   }
 }
