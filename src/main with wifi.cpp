@@ -243,6 +243,9 @@ void loop(){
   int battery_volt = analogRead(battery_volt_PIN);  //read battery voltage
   float battery_volt_float = battery_volt * (3.69 / 4095) * 2;  //convert battery voltage to float
   Serial.println("Battery Voltage: " + String(battery_volt_float) + "V");
+  if(battery_volt_float < 3.5){
+    Serial.println("Battery LOW");
+  }
 
   getSensorData();
   delay(1000);
