@@ -9,7 +9,6 @@
 #include "batteryLw.h"
 #include "XT_DAC_Audio.h"
 
-XT_Wav_Class batteryLw_audio(batterylow);
 XT_Wav_Class Sample_audio(sample);   //initializing the sample audio data
 XT_DAC_Audio_Class DacAudio(25, 0); //connected to pin10 or GPIO25 or DAC1
 
@@ -98,15 +97,6 @@ void play_sample()
   DacAudio.FillBuffer();
   DacAudio.Play(&Sample_audio);
   while (Sample_audio.Playing)
-  {
-    DacAudio.FillBuffer();
-  }
-}
-void play_batteryLow()
-{
-  DacAudio.FillBuffer();
-  DacAudio.Play(&batteryLw_audio);
-  while (batteryLw_audio.Playing)
   {
     DacAudio.FillBuffer();
   }
@@ -208,10 +198,6 @@ void loop(){
     //turning AC OFF
     //uint64_t tRawData[]={0x54AB00FF00FF00FF, 0x55AA2AD5};
     //IrSender.sendPulseDistanceWidthFromArray(38, 6050, 7350, 600, 1700, 600, 550, &tRawData[0], 97, PROTOCOL_IS_LSB_FIRST, 0, 0);
-  
-    //playing sound
-    Serial.println("playing sound");
-    play_batteryLow();
   }
 
   //check battery voltage
