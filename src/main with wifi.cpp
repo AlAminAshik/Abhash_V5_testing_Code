@@ -6,10 +6,14 @@
 #include "esp_task_wdt.h" //for disabling watchdog timer
 
 #include "SoundData.h"
-#include "halka_dane_jan.h"
+#include "Audio_Power_On.h"
+#include "Audio_Power_Off.h"
+#include "Audio_Halka_Dane_Jan.h"
 #include "XT_DAC_Audio.h"
 
-XT_Wav_Class halka_dane_audio(halka_dane_jan);
+XT_Wav_Class Halka_Dane_Audio(Halka_Dane_Jan);
+XT_Wav_Class Power_On_Audio(Power_On);
+XT_Wav_Class Power_Off_Audio(Power_Off);
 XT_Wav_Class Sample_audio(sample);   //initializing the sample audio data
 XT_DAC_Audio_Class DacAudio(25, 0); //connected to pin10 or GPIO25 or DAC1
 
@@ -47,6 +51,43 @@ NewPing sonarR(TRIG_R, TRIG_R, MAX_DISTANCE_SIDE + 30);
 
 int dL, dF, dR;
 
+void Play_Sample()
+{
+  DacAudio.FillBuffer();
+  DacAudio.Play(&Sample_audio);
+  while (Sample_audio.Playing)
+  {
+    DacAudio.FillBuffer();
+  }
+}
+void Play_Halka_Dane()
+{
+  DacAudio.FillBuffer();
+  DacAudio.Play(&Halka_Dane_Audio);
+  while (Halka_Dane_Audio.Playing)
+  {
+    DacAudio.FillBuffer();
+  }
+}
+void Play_Power_Off()
+{
+  DacAudio.FillBuffer();
+  DacAudio.Play(&Power_Off_Audio);
+  while (Power_Off_Audio.Playing)
+  {
+    DacAudio.FillBuffer();
+  }
+}
+void Play_Power_On()
+{
+  DacAudio.FillBuffer();
+  DacAudio.Play(&Power_On_Audio);
+  while (Power_On_Audio.Playing)
+  {
+    DacAudio.FillBuffer();
+  }
+}
+
 void setup() {
   esp_task_wdt_deinit(); // Disable watchdog timer
   Serial.begin(115200);
@@ -66,6 +107,7 @@ void setup() {
     Serial.println("Device is ON");
   
   //bootup sound nd vibrationu
+    Play_Power_On();                    //play on headphone DAC
     //pinMode(buzzer_PIN, OUTPUT);          //buzzer pin as output
     pinMode(MOTOR_PIN, OUTPUT);
     digitalWrite(MOTOR_PIN, HIGH);
@@ -93,24 +135,6 @@ void setup() {
   pinMode(2, OUTPUT);                  // on board led
 }
 
-void play_sample()
-{
-  DacAudio.FillBuffer();
-  DacAudio.Play(&Sample_audio);
-  while (Sample_audio.Playing)
-  {
-    DacAudio.FillBuffer();
-  }
-}
-void play_halka_dane()
-{
-  DacAudio.FillBuffer();
-  DacAudio.Play(&halka_dane_audio);
-  while (halka_dane_audio.Playing)
-  {
-    DacAudio.FillBuffer();
-  }
-}
 
 long dst_median(NewPing s, int max, int cnt) {
   long tmr = millis();
@@ -146,9 +170,9 @@ void loop(){
     delay(500);
     digitalWrite(2, HIGH);     //keep off on board led if not connected to net
   }
-  else{
-    digitalWrite(2,LOW);   //glow on board led when connection is successful
-  }
+    else{
+      digitalWrite(2,LOW);   //glow on board led when connection is successful
+    }
 
   //check if internet is available
   if(client.connect(host,80)){
@@ -164,6 +188,7 @@ void loop(){
         while(digitalRead(PWR_BUTTON_PIN) == LOW){    //while button is kept pressed
           Serial.println("Shutting Down");
           digitalWrite(MOTOR_PIN, HIGH);
+          Play_Power_Off();                     //sound on headphone DAC
           ledcWriteTone(BUZZER_CHANNEL, 1000);
           delay(100);
           ledcWriteTone(BUZZER_CHANNEL, 0);
@@ -197,7 +222,7 @@ void loop(){
     
     //playing sound
     Serial.println("Playing sample");
-    play_sample();
+    Play_Sample();
   }
 
   //check if top button is pressed
@@ -211,7 +236,7 @@ void loop(){
 
     //playing sound
     Serial.println("Playing sample");
-    play_halka_dane();
+    Play_Halka_Dane();
   }
 
   //check battery voltage
