@@ -150,23 +150,23 @@ void setup() {
     Serial.println("Device is ON");
   
   // setup buzzer
-  ledcAttach(BUZZER_CHANNEL, 5000, 8); //ledcAttach(pin, frequency, resolution)
+  ledcAttach(BUZZER_PIN, 5000, 8); //ledcAttach(pin, frequency, resolution)
 
   //bootup sound and vibration
     Play_Power_On();                    //play on headphone DAC
     pinMode(MOTOR_PIN, OUTPUT);
     digitalWrite(MOTOR_PIN, HIGH);
-    ledcWriteTone(BUZZER_CHANNEL, 1000);
+    ledcWriteTone(BUZZER_PIN, 1000);
     delay(100);
-    ledcWriteTone(BUZZER_CHANNEL, 0);
+    ledcWriteTone(BUZZER_PIN, 0);
     delay(100);
-    ledcWriteTone(BUZZER_CHANNEL, 1000);
+    ledcWriteTone(BUZZER_PIN, 1000);
     delay(100);
-    ledcWriteTone(BUZZER_CHANNEL, 0);
+    ledcWriteTone(BUZZER_PIN, 0);
     delay(100);
-    ledcWriteTone(BUZZER_CHANNEL, 1000);
+    ledcWriteTone(BUZZER_PIN, 1000);
     delay(100);
-    ledcWriteTone(BUZZER_CHANNEL, 0);
+    ledcWriteTone(BUZZER_PIN, 0);
     delay(100);
     digitalWrite(MOTOR_PIN, LOW);
 
@@ -235,17 +235,17 @@ void loop(){
           Serial.println("Shutting Down");
           digitalWrite(MOTOR_PIN, HIGH);
           Play_Power_Off();                     //sound on headphone DAC
-          ledcWriteTone(BUZZER_CHANNEL, 1000);
+          ledcWriteTone(BUZZER_PIN, 1000);
           delay(100);
-          ledcWriteTone(BUZZER_CHANNEL, 0);
+          ledcWriteTone(BUZZER_PIN, 0);
           delay(100);
-          ledcWriteTone(BUZZER_CHANNEL, 1000);
+          ledcWriteTone(BUZZER_PIN, 1000);
           delay(100);
-          ledcWriteTone(BUZZER_CHANNEL, 0);
+          ledcWriteTone(BUZZER_PIN, 0);
           delay(100);
-          ledcWriteTone(BUZZER_CHANNEL, 1000);
-          delay(500);
-          ledcWriteTone(BUZZER_CHANNEL, 0);
+          ledcWriteTone(BUZZER_PIN, 1000);
+          delay(100);
+          ledcWriteTone(BUZZER_PIN, 0);
           delay(100);
           digitalWrite(MOTOR_PIN, LOW);
         }
@@ -303,9 +303,9 @@ void loop(){
 
   //beep continously if headphone not connected
   if(headphone == LOW){
-  ledcWriteTone(BUZZER_CHANNEL, 1000);        //play beep sound
+  ledcWriteTone(BUZZER_PIN, 1000);        //play beep sound
   delay(100);
-  ledcWriteTone(BUZZER_CHANNEL, 0);           //turn off beeping
+  ledcWriteTone(BUZZER_PIN, 0);           //turn off beeping
   delay(100);
   }
 }
