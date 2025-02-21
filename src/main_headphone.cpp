@@ -4,13 +4,13 @@
 // //Adding audio files and library
 #include "Audio_agate_thakun.h"         //D
 #include "Audio_Bame_Badha.h"           //D
-#include "Audio_Bame_Jan.h"           //problem
+#include "Audio_Bame_Jan.h"             //D
 #include "Audio_Dane_Badha.h"           //D
-#include "Audio_Dane_Jan.h"           //problem
+#include "Audio_Dane_Jan.h"             //D
 #include "Audio_Halka_Dane_Jan.h"       //D
 #include "Audio_Power_Off.h"            //D
 #include "Audio_Power_On.h"             //D
-#include "Audio_Thamun.h"             //problem
+#include "Audio_Thamun.h"               //D
 //#include "SoundData.h"
 #include "XT_DAC_Audio.h"
 
