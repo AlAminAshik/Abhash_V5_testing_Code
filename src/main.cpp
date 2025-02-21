@@ -6,30 +6,30 @@
 // //#include "esp32-hal-ledc.h" //ledc driver for buzzer
 // #include "esp_task_wdt.h" //for disabling watchdog timer
 
-// //Adding audio files and library
+// // //Adding audio files and library
 // #include "Audio_agate_thakun.h"
-// #include "Audio_Bame_Badha.h"
-// #include "Audio_Bame_Jan.h"
-// #include "Audio_Dane_Badha.h"
-// #include "Audio_Dane_Jan.h"
-// #include "Audio_Halka_Dane_Jan.h"
-// #include "Audio_Power_Off.h"
-// #include "Audio_Power_On.h"
-// #include "Audio_Thamun.h"
-// #include "SoundData.h"
+// // #include "Audio_Bame_Badha.h"
+// // #include "Audio_Bame_Jan.h"
+// // #include "Audio_Dane_Badha.h"
+// // #include "Audio_Dane_Jan.h"
+// // #include "Audio_Halka_Dane_Jan.h"
+// // #include "Audio_Power_Off.h"
+// // #include "Audio_Power_On.h"
+// // #include "Audio_Thamun.h"
+// //#include "SoundData.h"
 // #include "XT_DAC_Audio.h"
 
-// //initializing and assigning class to the audio array
+// // //initializing and assigning class to the audio array
 // XT_Wav_Class Agate_Thakun_Audio(Agate_Thakun);
-// XT_Wav_Class Bame_Badha_Audio(Bame_Badha);
-// XT_Wav_Class Bame_Jan_Audio(Bame_Jan);
-// XT_Wav_Class Dane_Badha_Audio(Dane_Badha);
-// XT_Wav_Class Dane_Jan_Audio(Dane_Jan);
-// XT_Wav_Class Halka_Dane_Audio(Halka_Dane_Jan);
-// XT_Wav_Class Power_Off_Audio(Power_Off);
-// XT_Wav_Class Power_On_Audio(Power_On);
-// XT_Wav_Class Thamu_Audio(Thamun);
-// //XT_Wav_Class Sample_audio(sample);   //initializing the sample audio data
+// // XT_Wav_Class Bame_Badha_Audio(Bame_Badha);
+// // XT_Wav_Class Bame_Jan_Audio(Bame_Jan);
+// // XT_Wav_Class Dane_Badha_Audio(Dane_Badha);
+// // XT_Wav_Class Dane_Jan_Audio(Dane_Jan);
+// // XT_Wav_Class Halka_Dane_Audio(Halka_Dane_Jan);
+// // XT_Wav_Class Power_Off_Audio(Power_Off);
+// // XT_Wav_Class Power_On_Audio(Power_On);
+// // XT_Wav_Class Thamu_Audio(Thamun);
+// // XT_Wav_Class Sample_audio(sample);   //initializing the sample audio data
 // XT_DAC_Audio_Class DacAudio(25, 0); //connected to pin10 or GPIO25 or DAC1 (create the main player class object)
 
 // const char *ssid     = "Alamin";    //enter name of wifi
@@ -73,54 +73,54 @@
 //   DacAudio.Play(&Agate_Thakun_Audio);
 //   while (Agate_Thakun_Audio.Playing) DacAudio.FillBuffer();
 // }
-// void Play_Bame_Badha()
-// {
-//   DacAudio.FillBuffer();
-//   DacAudio.Play(&Bame_Badha_Audio);
-//   while (Bame_Badha_Audio.Playing) DacAudio.FillBuffer();
-// }
-// void Play_Bame_Jan()
-// {
-//   DacAudio.FillBuffer();
-//   DacAudio.Play(&Bame_Jan_Audio);
-//   while (Bame_Jan_Audio.Playing) DacAudio.FillBuffer();
-// }
-// void Play_Dane_Badha()
-// {
-//   DacAudio.FillBuffer();
-//   DacAudio.Play(&Dane_Badha_Audio);
-//   while (Dane_Badha_Audio.Playing) DacAudio.FillBuffer();
-// }
-// void Play_Dane_Jan()
-// {
-//   DacAudio.FillBuffer();
-//   DacAudio.Play(&Dane_Jan_Audio);
-//   while (Dane_Jan_Audio.Playing) DacAudio.FillBuffer();
-// }
-// void Play_Halka_Dane_Jan()
-// {
-//   DacAudio.FillBuffer();
-//   DacAudio.Play(&Halka_Dane_Audio);
-//   while (Halka_Dane_Audio.Playing) DacAudio.FillBuffer();
-// }
-// void Play_Power_Off()
-// {
-//   DacAudio.FillBuffer();
-//   DacAudio.Play(&Power_Off_Audio);
-//   while (Power_Off_Audio.Playing) DacAudio.FillBuffer();
-// }
-// void Play_Power_On()
-// {
-//   DacAudio.FillBuffer();
-//   DacAudio.Play(&Power_On_Audio);
-//   while (Power_On_Audio.Playing) DacAudio.FillBuffer();
-// }
-// void Play_Thamun()
-// {
-//   DacAudio.FillBuffer();
-//   DacAudio.Play(&Thamu_Audio);
-//   while (Thamu_Audio.Playing) DacAudio.FillBuffer();
-// }
+// // void Play_Bame_Badha()
+// // {
+// //   DacAudio.FillBuffer();
+// //   DacAudio.Play(&Bame_Badha_Audio);
+// //   while (Bame_Badha_Audio.Playing) DacAudio.FillBuffer();
+// // }
+// // void Play_Bame_Jan()
+// // {
+// //   DacAudio.FillBuffer();
+// //   DacAudio.Play(&Bame_Jan_Audio);
+// //   while (Bame_Jan_Audio.Playing) DacAudio.FillBuffer();
+// // }
+// // void Play_Dane_Badha()
+// // {
+// //   DacAudio.FillBuffer();
+// //   DacAudio.Play(&Dane_Badha_Audio);
+// //   while (Dane_Badha_Audio.Playing) DacAudio.FillBuffer();
+// // }
+// // void Play_Dane_Jan()
+// // {
+// //   DacAudio.FillBuffer();
+// //   DacAudio.Play(&Dane_Jan_Audio);
+// //   while (Dane_Jan_Audio.Playing) DacAudio.FillBuffer();
+// // }
+// // void Play_Halka_Dane_Jan()
+// // {
+// //   DacAudio.FillBuffer();
+// //   DacAudio.Play(&Halka_Dane_Audio);
+// //   while (Halka_Dane_Audio.Playing) DacAudio.FillBuffer();
+// // }
+// // void Play_Power_Off()
+// // {
+// //   DacAudio.FillBuffer();
+// //   DacAudio.Play(&Power_Off_Audio);
+// //   while (Power_Off_Audio.Playing) DacAudio.FillBuffer();
+// // }
+// // void Play_Power_On()
+// // {
+// //   DacAudio.FillBuffer();
+// //   DacAudio.Play(&Power_On_Audio);
+// //   while (Power_On_Audio.Playing) DacAudio.FillBuffer();
+// // }
+// // void Play_Thamun()
+// // {
+// //   DacAudio.FillBuffer();
+// //   DacAudio.Play(&Thamu_Audio);
+// //   while (Thamu_Audio.Playing) DacAudio.FillBuffer();
+// // }
 // // void Play_Sample()
 // // {
 // //   DacAudio.FillBuffer();
@@ -136,9 +136,9 @@
 
 //   //  //The following code is for old platform, platform = espressif32@3.5.0
 //   // // // Configure LEDC PWM
-//   // ledcSetup(BUZZER_CHANNEL, 5000, 8); //channel number, PWM frequency, 8 bit resolution
+//   // ledcSetup(BUZZER_PIN, 5000, 8); //channel number, PWM frequency, 8 bit resolution
 //   // // // Attach the LED pin to the LEDC channel
-//   // ledcAttachPin(BUZZER_CHANNEL, BUZZER_CHANNEL); //buzzer pin connected to channel 0
+//   // ledcAttachPin(BUZZER_PIN, BUZZER_PIN); //buzzer pin connected to channel 0
   
 
 //   //Power on schedule
@@ -150,23 +150,23 @@
 //     Serial.println("Device is ON");
   
 //   // setup buzzer
-//   ledcAttach(BUZZER_CHANNEL, 5000, 8); //ledcAttach(pin, frequency, resolution)
+//   ledcAttach(BUZZER_PIN, 5000, 8); //ledcAttach(pin, frequency, resolution)
 
 //   //bootup sound and vibration
-//     Play_Power_On();                    //play on headphone DAC
+//     //Play_Power_On();                    //play on headphone DAC
 //     pinMode(MOTOR_PIN, OUTPUT);
 //     digitalWrite(MOTOR_PIN, HIGH);
-//     ledcWriteTone(BUZZER_CHANNEL, 1000);
+//     ledcWriteTone(BUZZER_PIN, 1000);
 //     delay(100);
-//     ledcWriteTone(BUZZER_CHANNEL, 0);
+//     ledcWriteTone(BUZZER_PIN, 0);
 //     delay(100);
-//     ledcWriteTone(BUZZER_CHANNEL, 1000);
+//     ledcWriteTone(BUZZER_PIN, 1000);
 //     delay(100);
-//     ledcWriteTone(BUZZER_CHANNEL, 0);
+//     ledcWriteTone(BUZZER_PIN, 0);
 //     delay(100);
-//     ledcWriteTone(BUZZER_CHANNEL, 1000);
+//     ledcWriteTone(BUZZER_PIN, 1000);
 //     delay(100);
-//     ledcWriteTone(BUZZER_CHANNEL, 0);
+//     ledcWriteTone(BUZZER_PIN, 0);
 //     delay(100);
 //     digitalWrite(MOTOR_PIN, LOW);
 
@@ -234,18 +234,18 @@
 //         while(digitalRead(PWR_BUTTON_PIN) == LOW){    //while button is kept pressed
 //           Serial.println("Shutting Down");
 //           digitalWrite(MOTOR_PIN, HIGH);
-//           Play_Power_Off();                     //sound on headphone DAC
-//           ledcWriteTone(BUZZER_CHANNEL, 1000);
+//           //Play_Power_Off();                     //sound on headphone DAC
+//           ledcWriteTone(BUZZER_PIN, 1000);
 //           delay(100);
-//           ledcWriteTone(BUZZER_CHANNEL, 0);
+//           ledcWriteTone(BUZZER_PIN, 0);
 //           delay(100);
-//           ledcWriteTone(BUZZER_CHANNEL, 1000);
+//           ledcWriteTone(BUZZER_PIN, 1000);
 //           delay(100);
-//           ledcWriteTone(BUZZER_CHANNEL, 0);
+//           ledcWriteTone(BUZZER_PIN, 0);
 //           delay(100);
-//           ledcWriteTone(BUZZER_CHANNEL, 1000);
+//           ledcWriteTone(BUZZER_PIN, 1000);
 //           delay(500);
-//           ledcWriteTone(BUZZER_CHANNEL, 0);
+//           ledcWriteTone(BUZZER_PIN, 0);
 //           delay(100);
 //           digitalWrite(MOTOR_PIN, LOW);
 //         }
@@ -263,12 +263,12 @@
 //     digitalWrite(pedestrian_led, HIGH);
     
 //     //turning AC ON
-//     //uint64_t tRawData[]={0x56A900FF00FF00FF, 0x55AA2AD5};
-//     //IrSender.sendPulseDistanceWidthFromArray(38, 6050, 7400, 550, 1700, 550, 550, &tRawData[0], 97, PROTOCOL_IS_LSB_FIRST, 0, 0);
+//     uint64_t tRawData[]={0x56A900FF00FF00FF, 0x55AA2AD5};
+//     IrSender.sendPulseDistanceWidthFromArray(38, 6050, 7400, 550, 1700, 550, 550, &tRawData[0], 97, PROTOCOL_IS_LSB_FIRST, 0, 0);
     
 //     //playing sound
 //     Serial.println("Playing audio");
-//     Play_Thamun();
+//     Play_Agate_Thakun();
 //   }
 
 //   //check if top button is pressed
@@ -277,38 +277,38 @@
 //     //glow pedestrian led
 //     digitalWrite(pedestrian_led, LOW);  
 //     //turning AC OFF
-//     //uint64_t tRawData[]={0x54AB00FF00FF00FF, 0x55AA2AD5};
-//     //IrSender.sendPulseDistanceWidthFromArray(38, 6050, 7350, 600, 1700, 600, 550, &tRawData[0], 97, PROTOCOL_IS_LSB_FIRST, 0, 0);
+//     uint64_t tRawData[]={0x54AB00FF00FF00FF, 0x55AA2AD5};
+//     IrSender.sendPulseDistanceWidthFromArray(38, 6050, 7350, 600, 1700, 600, 550, &tRawData[0], 97, PROTOCOL_IS_LSB_FIRST, 0, 0);
 
 //     //playing sound
 //     Serial.println("Playing audio");
-//     Play_Agate_Thakun();
-//     Play_Bame_Badha();
-//     Play_Bame_Jan();
-//     Play_Dane_Badha();
-//     Play_Dane_Jan();
-//     Play_Halka_Dane_Jan();
-//     Play_Power_Off();
-//     Play_Power_On();
-//     Play_Thamun();
+//     // Play_Agate_Thakun();
+//     // Play_Bame_Badha();
+//     // Play_Bame_Jan();
+//     // Play_Dane_Badha();
+//     // Play_Dane_Jan();
+//     // Play_Halka_Dane_Jan();
+//     // Play_Power_Off();
+//     // Play_Power_On();
+//     // Play_Thamun();
 //   }
 
-//   // //check battery voltage
-//   // int battery_volt = analogRead(battery_volt_PIN);  //read battery voltage
-//   // float battery_volt_float = battery_volt * (3.69 / 4095) * 2;  //convert battery voltage to float
-//   // Serial.println("Battery Voltage: " + String(battery_volt_float) + "V");
-//   // if(battery_volt_float < 3.5){
-//   //   Serial.println("Battery LOW");
-//   // }
+//   //check battery voltage
+//   int battery_volt = analogRead(battery_volt_PIN);  //read battery voltage
+//   float battery_volt_float = battery_volt * (3.69 / 4095) * 2;  //convert battery voltage to float
+//   Serial.println("Battery Voltage: " + String(battery_volt_float) + "V");
+//   if(battery_volt_float < 3.5){
+//     Serial.println("Battery LOW");
+//   }
 
 //   getSensorData();
 //   delay(1000);
 
 //   //beep continously if headphone not connected
 //   if(headphone == LOW){
-//   ledcWriteTone(BUZZER_CHANNEL, 1000);        //play beep sound
+//   ledcWriteTone(BUZZER_PIN, 1000);        //play beep sound
 //   delay(100);
-//   ledcWriteTone(BUZZER_CHANNEL, 0);           //turn off beeping
+//   ledcWriteTone(BUZZER_PIN, 0);           //turn off beeping
 //   delay(100);
 //   }
 // }
